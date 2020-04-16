@@ -20,7 +20,15 @@ public class RSSIData {
         return value;
     }
 
+    public void setValue(int value){
+        this.value = value;
+    }
+
     public long getTimeStamp() {
         return timeStamp;
+    }
+
+    public void setTimeStamp(long timeStamp){
+        this.timeStamp = timeStamp;
     }
 }

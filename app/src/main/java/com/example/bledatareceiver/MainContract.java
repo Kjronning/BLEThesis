@@ -11,6 +11,8 @@ interface ContractView {
     void addYAxis();
 
     void subtractYAxis();
+
+    void changeInformationTextView(String text);
 }
 interface Presenter {
     void handleDiscoveryButtonPress();
