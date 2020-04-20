@@ -51,9 +51,10 @@ class RSSIData {
     }
 
     void fillRSSI(int value){
+        //TODO: One array is never filled
         Log.d(TAG,"Pointer for MACAddress " + MACAddress + ": " + pointer);
         Log.d(TAG, "Array for MACAddress " + MACAddress + ": " + toString());
-        if(pointer>19)
+        if(isFilled)
             return;
         rssi[pointer] = value;
         pointer++;

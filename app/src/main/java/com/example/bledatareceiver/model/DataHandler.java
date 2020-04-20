@@ -43,12 +43,6 @@ public class DataHandler {
     }
 
     boolean isReady() {
-        boolean isReadyToSave = false;
-        for(RSSIData item : data){
-            isReadyToSave &= item.isFilled();
-            Log.d(TAG, item.getMACAddress() + (item.isFilled() ? "is filled" : "is not filled"));
-            Log.d(TAG, "The arrays are " + (isReadyToSave ? "" : "not ") + "ready to save");
-        }
-        return isReadyToSave;
+        return data.stream().allMatch(RSSIData::isFilled);
     }
 }
