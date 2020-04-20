@@ -4,18 +4,20 @@ public interface MainContract {
 }
 
 interface ContractView {
-    void addXAxis();
+    void showToast(String text);
 
-    void subtractXAxis();
+    void setXCoordinate(int x);
 
-    void addYAxis();
-
-    void subtractYAxis();
+    void setYCoordinate(int y);
 
     void changeInformationTextView(String text);
 }
 interface Presenter {
     void handleDiscoveryButtonPress();
+
+    void sendToast(String text);
+
+    void handleHandlerScanResult(String text);
 
     void handleCalibrationButtonPress();
 

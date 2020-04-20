@@ -1,68 +1,72 @@
 package com.example.bledatareceiver.model;
 
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanResult;
 import android.util.Log;
 
-import java.util.ArrayList;
+import com.example.bledatareceiver.MainPresenter;
+import java.util.List;
 
 public class BluetoothHandler {
     private final String TAG = "BluetoothHandler Class";
     private BluetoothAdapter BTAdapter;
-    private ArrayList<RSSIData> data;
-    private final BroadcastReceiver receiver;
+    private DataHandler dataHandler;
+    private ScanCallback callback;
+    private MainPresenter presenter;
 
 
     public BluetoothHandler() {
         BTAdapter = BluetoothAdapter.getDefaultAdapter();
-        data = new ArrayList<>();
-        receiver = new BroadcastReceiver() {
+        dataHandler = new DataHandler();
+        callback = new ScanCallback() {
             @Override
-            public void onReceive(Context context, Intent intent) {
-                Log.i(TAG, "onReceive method called");
-                String action = intent.getAction();
-                if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                    int rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE);
-                    String label = intent.getStringExtra(BluetoothDevice.EXTRA_NAME);
-                    setOrAddDatum(rssi, label, System.currentTimeMillis());
+            public void onScanResult(int callbackType, ScanResult result) {
+                final int rssi = result.getRssi();
+                final String name = result.getDevice().getName() == null ? "Nameless" : result.getDevice().getName();
+                final String address = result.getDevice().getAddress();
+                if (!name.equals("RBDot"))
+                    return;
+                addAndCheckData(rssi, address);
+                presenter.handleHandlerScanResult(dataHandler.getDataListString());
+            }
 
-                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                    String deviceName = device.getName();
-                    Log.i("Bluetooth", "got device " + deviceName);
-                }
+            @Override
+            public void onScanFailed(int errorCode) {
+                Log.d(TAG, "Scan failed with error code: " + errorCode);
+            }
+
+            @Override
+            public void onBatchScanResults(List<ScanResult> results) {
+                Log.d(TAG, results.toString());
             }
         };
     }
 
+    public String getDataListString(){
+        return dataHandler.getDataListString();
+    }
 
-    private void setOrAddDatum(int rssi, String label, long currentTime) {
-        for (RSSIData datum : data) {
-            Log.i(TAG, datum.toString());
-            if (datum.getLabel().equals(label)) {
-                datum.setTimeStamp(currentTime);
-                datum.setValue(rssi);
-            } else {
-                data.add(new RSSIData(label, rssi, currentTime));
-            }
+    public void setPresenter(MainPresenter presenter) {
+        this.presenter = presenter;
+    }
+
+    public void scan() {
+        dataHandler.clearData();
+        BTAdapter.getBluetoothLeScanner().startScan(callback);
+    }
+
+    public void stopScan() {
+        BTAdapter.getBluetoothLeScanner().stopScan(callback);
+    }
+
+
+    private void addAndCheckData(final int rssi, final String MACAddress) {
+        dataHandler.setOrAddItem(rssi, MACAddress);
+        if (dataHandler.isReady()) {
+            presenter.sendToast("Arrays filled!");
+            dataHandler.saveData();
+            stopScan();
         }
-    }
-
-    public String getDataListString() {
-        StringBuilder list = new StringBuilder();
-        for (RSSIData datum : data) {
-            list.append("name: ").append(datum.getLabel()).append(" RSSI: ").append(datum.getValue()).append("\n");
-        }
-        return list.toString();
-    }
-
-    public void startDiscovery() {
-        BTAdapter.startDiscovery();
-    }
-
-    public BroadcastReceiver getReceiver() {
-        return receiver;
     }
 }

@@ -1,34 +1,67 @@
 package com.example.bledatareceiver.model;
 
-public class RSSIData {
-    private String label;
-    private int value;
-    private long timeStamp;
+import android.util.Log;
+
+import java.util.Arrays;
+
+class RSSIData {
+    private final String TAG = "RSSIData";
+    private String MACAddress;
+    private int[] rssi;
+    private int pointer;
+    private boolean isFilled;
 
 
-    public RSSIData(String label, int value, long timeStamp) {
-        this.label = label;
-        this.value = value;
-        this.timeStamp = timeStamp;
+    RSSIData(String MACAddress) {
+        this.MACAddress = MACAddress;
+        this.rssi = new int[20];
+        pointer = 0;
+        isFilled = false;
     }
 
-    public String getLabel() {
-        return label;
+    String getMACAddress() {
+        return MACAddress;
     }
 
-    public int getValue() {
-        return value;
+    int[] getRSSI() {
+        return rssi;
     }
 
-    public void setValue(int value){
-        this.value = value;
+    int getRSSIMean(){
+        return (int)Arrays.stream(rssi).average().orElse(1);
     }
 
-    public long getTimeStamp() {
-        return timeStamp;
+    void clearRSSI(){
+        rssi = new int[20];
+        pointer = 0;
+        isFilled = false;
     }
 
-    public void setTimeStamp(long timeStamp){
-        this.timeStamp = timeStamp;
+    int getRSSIMedian(){
+        int size = rssi.length;
+        return (int)Arrays.stream(rssi).sorted().skip((size-1)/2).limit(2-size%2).average().orElse(1);
+    }
+
+    int getLastAdded(){
+        return rssi[pointer <= 0 ? 0 : pointer-1];
+    }
+
+    boolean isFilled(){
+        return isFilled;
+    }
+
+    void fillRSSI(int value){
+        Log.d(TAG,"Pointer for MACAddress " + MACAddress + ": " + pointer);
+        Log.d(TAG, "Array for MACAddress " + MACAddress + ": " + toString());
+        if(pointer>19)
+            return;
+        rssi[pointer] = value;
+        pointer++;
+        isFilled = rssi[rssi.length-1] != 0;
+    }
+
+    @Override
+    public String toString(){
+        return Arrays.toString(rssi);
     }
 }
