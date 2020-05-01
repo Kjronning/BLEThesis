@@ -2,34 +2,24 @@ package com.example.bledatareceiver;
 
 import android.util.Log;
 
-import com.example.bledatareceiver.model.BluetoothHandler;
+import com.example.bledatareceiver.model.DataController;
+
 
 public class MainPresenter implements Presenter {
-    private final String TAG = "Presenter implementation";
+    private final String TAG = "MainPresenter";
     private ContractView contractView;
-    private BluetoothHandler bluetoothHandler;
-    private boolean isScanning = false;
-    private int x;
-    private int y;
+    private DataController dataController;
 
     MainPresenter(ContractView contractView){
-        this.bluetoothHandler = new BluetoothHandler();
+        this.dataController = new DataController(this);
         this.contractView = contractView;
-        bluetoothHandler.setPresenter(this);
     }
+
 
     @Override
     public void handleDiscoveryButtonPress() {
         Log.i(TAG, "Pressed discovery button");
-        if(isScanning) {
-            bluetoothHandler.stopScan();
-            isScanning = false;
-        }
-        else {
-            bluetoothHandler.scan();
-            isScanning = true;
-        }
-        contractView.changeInformationTextView(bluetoothHandler.getDataListString());
+        dataController.startCycling();
     }
 
     @Override
@@ -38,7 +28,7 @@ public class MainPresenter implements Presenter {
     }
 
     @Override
-    public void handleHandlerScanResult(String text){
+    public void handleScanResult(String text){
         contractView.changeInformationTextView(text);
     }
 
@@ -49,22 +39,22 @@ public class MainPresenter implements Presenter {
 
     @Override
     public void handleAddXButtonPress() {
-        contractView.setXCoordinate(x = ++x%10);
+        contractView.setXCoordinate(dataController.getModuloOfXSum(1));
     }
 
     @Override
     public void handleSubtractXButtonPress() {
-        contractView.setXCoordinate(x = (--x%10+10)%10);
+        contractView.setXCoordinate(dataController.getModuloOfXSum(-1));
     }
 
     @Override
     public void handleAddYButtonPress() {
-        contractView.setYCoordinate(y = ++y%10);
+        contractView.setYCoordinate(dataController.getModuloOfYSum(1));
 
     }
 
     @Override
     public void handleSubtractYButtonPress() {
-        contractView.setYCoordinate(y = (--y%10+10)%10);
+        contractView.setYCoordinate(dataController.getModuloOfYSum(-1));
     }
 }

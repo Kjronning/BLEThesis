@@ -17,7 +17,7 @@ interface Presenter {
 
     void sendToast(String text);
 
-    void handleHandlerScanResult(String text);
+    void handleScanResult(String text);
 
     void handleCalibrationButtonPress();
 
