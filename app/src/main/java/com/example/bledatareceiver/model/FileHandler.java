@@ -1,35 +1,26 @@
 package com.example.bledatareceiver.model;
 
-import android.os.Environment;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 public class FileHandler {
     private final String TAG = "model/FileHandler";
     private String fileName;
-    private File file;
+    private StringBuilder data;
 
     public FileHandler(String fileName){
         this.fileName = fileName;
-        if(Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()))
-            file = new File(Environment.getExternalStorageDirectory(), fileName);
+        data = new StringBuilder();
+
     }
 
     public void addHeader(String header){
-        if (file.length() == 0)
-            write(header);
+        if (data.length() == 0)
+            append(header);
     }
 
-    public void write(String data) {
-        try (FileOutputStream fos = new FileOutputStream(file)){
-            fos.write(data.getBytes());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void append(String data) {
+        this.data.append(data);
+    }
+
+    public String send(){
+        return data.toString();
     }
 }

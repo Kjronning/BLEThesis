@@ -1,6 +1,11 @@
 package com.example.bledatareceiver;
 
-import android.support.v7.app.AppCompatActivity;
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -36,6 +41,18 @@ public class MainActivity extends AppCompatActivity implements ContractView {
 
         subtractYButton = findViewById(R.id.subtractYButton);
         subtractYButton.setOnClickListener(v -> presenter.handleSubtractYButtonPress());
+
+        askLocationPermission();
+    }
+
+    private void askLocationPermission() {
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED)
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
+        if(checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+        }
     }
 
 
@@ -57,5 +74,17 @@ public class MainActivity extends AppCompatActivity implements ContractView {
     @Override
     public void changeInformationTextView(String text) {
         informationTextView.setText(text);
+    }
+
+    @Override
+    public void sendEmailIntent(String data) {
+        Intent email = new Intent(Intent.ACTION_SENDTO);
+        email.putExtra(Intent.EXTRA_EMAIL, new String [] {"kjronning@gmail.com"});
+        email.putExtra(Intent.EXTRA_SUBJECT,"BLEData");
+        email.putExtra(Intent.EXTRA_TEXT, data);
+        Intent chooser = Intent.createChooser(email, "Mail to ..");
+        if (email.resolveActivity(getPackageManager()) != null) {
+            startActivity(chooser);
+        }
     }
 }

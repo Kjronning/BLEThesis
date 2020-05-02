@@ -1,6 +1,6 @@
 package com.example.bledatareceiver.model;
 
-import android.icu.util.Measure;
+import android.util.Log;
 
 import com.example.bledatareceiver.MainPresenter;
 
@@ -36,7 +36,10 @@ public class DataController {
         if (measurementListRepository.isReady()) {
             presenter.sendToast("Arrays filled!");
             writeHeader("x y " + measurementListRepository.getAddresses());
-            saveToFile(measurementListRepository.getDataAsString());
+            String data = x + " " + y + " " + measurementListRepository.getDataAsString();
+            saveToFile(data);
+            Log.d(TAG, "Saving data: " +  data);
+            clearDataArrays();
             cycles++;
         }
         presenter.handleScanResult(measurementListRepository.getDataListString());
@@ -46,6 +49,8 @@ public class DataController {
 
     private void stopCycling() {
         clearDataArrays();
+        presenter.sendToast("Data saved!");
+        presenter.sendEmail(fileHandler.send());
         bluetoothService.stopCyclingScan();
     }
 
@@ -61,7 +66,7 @@ public class DataController {
 
     private void saveToFile(String dataAsString) {
         String line = String.format("%d %d %s \b", x, y, dataAsString);
-        fileHandler.write(line);
+        fileHandler.append(line);
     }
 
     public int getModuloOfXSum(int i) {

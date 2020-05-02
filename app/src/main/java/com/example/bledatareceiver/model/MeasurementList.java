@@ -49,8 +49,6 @@ class MeasurementList {
 
     void push(int value){
         //TODO: One array is never filled
-        Log.d(TAG,"Pointer for MACAddress " + MACAddress + ": " + pointer);
-        Log.d(TAG, "Array for MACAddress " + MACAddress + ": " + toString());
         if(isFilled)
             return;
         array[pointer++] = value;

@@ -57,4 +57,9 @@ public class MainPresenter implements Presenter {
     public void handleSubtractYButtonPress() {
         contractView.setYCoordinate(dataController.getModuloOfYSum(-1));
     }
+
+    @Override
+    public void sendEmail(String send) {
+        contractView.sendEmailIntent(send);
+    }
 }

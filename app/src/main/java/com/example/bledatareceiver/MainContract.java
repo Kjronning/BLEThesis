@@ -11,6 +11,8 @@ interface ContractView {
     void setYCoordinate(int y);
 
     void changeInformationTextView(String text);
+
+    void sendEmailIntent(String send);
 }
 interface Presenter {
     void handleDiscoveryButtonPress();
@@ -28,4 +30,6 @@ interface Presenter {
     void handleAddYButtonPress();
 
     void handleSubtractYButtonPress();
+
+    void sendEmail(String send);
 }

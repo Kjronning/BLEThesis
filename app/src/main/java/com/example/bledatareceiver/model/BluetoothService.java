@@ -3,6 +3,7 @@ package com.example.bledatareceiver.model;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
+import android.util.Log;
 
 class BluetoothService {
     private final String TAG = "model/BluetoothService";

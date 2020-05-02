@@ -14,7 +14,7 @@ public class MeasurementListRepository {
     }
 
     void setOrAddItem(final int rssi, final String MACAddress) {
-        dataArrays.stream().filter(measurementList -> measurementList.getAddress().equals(MACAddress)).findFirst().orElse(createItem(MACAddress)).push(rssi);
+        dataArrays.stream().filter(measurementList -> measurementList.getAddress().equals(MACAddress)).findFirst().orElseGet(() -> createItem(MACAddress)).push(rssi);
     }
 
     private MeasurementList createItem(String MACAddress) {
