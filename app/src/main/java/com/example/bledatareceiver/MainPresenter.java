@@ -61,5 +61,16 @@ public class MainPresenter implements Presenter {
     @Override
     public void sendEmail(String send) {
         contractView.sendEmailIntent(send);
+        //contractView.playReadySound();
+    }
+
+    @Override
+    public void handleAddSeparationButtonPress() {
+        contractView.setSeparation(dataController.addSeparation(1));
+    }
+
+    @Override
+    public void handleSubtractSeparationButtonPress() {
+        contractView.setSeparation(dataController.addSeparation(-1));
     }
 }

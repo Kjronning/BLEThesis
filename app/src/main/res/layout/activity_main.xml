@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:layout_width="131dp"
+            android:layout_width="62dp"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
@@ -61,7 +61,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="57dp"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -85,7 +85,7 @@
 
             <TextView
                 android:id="@+id/yAxis"
-                android:layout_width="match_parent"
+                android:layout_width="46dp"
                 android:layout_height="50dp"
                 android:layout_marginBottom="8dp"
                 android:text="0"
@@ -101,6 +101,49 @@
                 android:textSize="24sp" />
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="54dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="45dp"
+                android:layout_height="50dp"
+                android:text="D"
+                android:textAlignment="center"
+                android:textSize="30sp" />
+
+            <Button
+                android:id="@+id/addSeparationButton"
+                android:layout_width="45dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="▲"
+                android:textAlignment="center"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/separation"
+                android:layout_width="45dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="8dp"
+                android:text="1"
+                android:textAlignment="center"
+                android:textSize="36sp" />
+
+            <Button
+                android:id="@+id/subtractSeparationButton"
+                android:layout_width="45dp"
+                android:layout_height="50dp"
+                android:text="▼"
+                android:textAlignment="center"
+                android:textSize="24sp" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <TextView

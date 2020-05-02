@@ -13,6 +13,10 @@ interface ContractView {
     void changeInformationTextView(String text);
 
     void sendEmailIntent(String send);
+
+    void setSeparation(int value);
+
+    void playReadySound();
 }
 interface Presenter {
     void handleDiscoveryButtonPress();
@@ -32,4 +36,8 @@ interface Presenter {
     void handleSubtractYButtonPress();
 
     void sendEmail(String send);
+
+    void handleAddSeparationButtonPress();
+
+    void handleSubtractSeparationButtonPress();
 }

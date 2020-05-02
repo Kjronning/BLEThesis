@@ -26,6 +26,7 @@ public class MeasurementListRepository {
     String getDataAsString() {
         StringJoiner joiner = new StringJoiner(" ");
         for(MeasurementList item : dataArrays){
+            Log.d(TAG, String.format("Adding mean to data for address %s with array %s", item.getAddress(), item.toString()));
             joiner.add(item.getMean()+"");
         }
         return joiner.toString();
